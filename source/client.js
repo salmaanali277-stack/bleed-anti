@@ -26,6 +26,10 @@ module.exports = class Client extends Discord.Client {
     this.token = process.env.DISCORD_TOKEN || ''
     this.mongourl = process.env.MONGO_URL || ''
 
+    this.name = 'bleed'
+    this.website = 'bleed.bot'
+    this.status = '🔗 bleed.bot'
+
     this.support_server = 'discord.gg/bleed'
     this.developer = 'put_your_name_my_guy'
 
@@ -116,8 +120,10 @@ module.exports = class Client extends Discord.Client {
 
       if (!this.isReady()) return
 
-      this.user.setActivity(this.support_server, {
-        type: Discord.ActivityType.Competing
+      this.user.setActivity({
+        name: 'Custom Status',
+        type: Discord.ActivityType.Custom,
+        state: this.status
       })
     }, 600000)
   }

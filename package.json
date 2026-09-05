@@ -1,7 +1,7 @@
 {
-  "name": "bleed-anti",
+  "name": "bleed",
   "version": "1.0.0",
-  "description": "Discord antinuke bot",
+  "description": "bleed - a Discord bot",
   "main": "index.js",
   "private": true,
   "scripts": {
