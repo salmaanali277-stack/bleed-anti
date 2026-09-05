@@ -5,6 +5,10 @@ module.exports = async (client, guild) => {
 
   // CREATE SERVER DATA ON JOIN
 
+  const existing = await serverdataschema.findOne({ GuildID: guild.id })
+
+  if (existing) return
+
   const data = new serverdataschema({
     GuildID: guild.id,
     Prefix: ',',
@@ -37,5 +41,5 @@ module.exports = async (client, guild) => {
     AntiNukeWebhookThreshold: '1'
   })
 
-  data.save()
+  await data.save().catch((error) => { client.logger(`Could not create server data for ${guild.id}: ${error.message}`) })
 }

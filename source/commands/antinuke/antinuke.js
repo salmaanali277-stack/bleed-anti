@@ -1712,6 +1712,12 @@ module.exports = {
                 message, `Enabled **vanity** antinuke module. ${punishment_toggle}`, 'approve'
               )
             }
+
+          } else {
+
+            return new client.embed(
+              message, `**Incorrect usage** of command. Check syntax and try again`, 'warn'
+            )
           }
 
         } else {
@@ -1853,6 +1859,12 @@ module.exports = {
                 message, `Enabled **botadd** antinuke module. ${punishment_toggle}`, 'approve'
               )
             }
+
+          } else {
+
+            return new client.embed(
+              message, `**Incorrect usage** of command. Check syntax and try again`, 'warn'
+            )
           }
 
         } else {
@@ -1933,7 +1945,7 @@ module.exports = {
 
           let i = serverdata.AntiNukePermissionGrants.indexOf(permission)
           serverdata.AntiNukePermissionGrants.splice(i, 1)
-          serverdata.save()
+          await serverdata.save()
 
           return new client.embed(
             message, `No longer monitoring **granting of** permission \`${permission}\``, 'approve'
@@ -1942,7 +1954,7 @@ module.exports = {
         } else {
 
           serverdata.AntiNukePermissionGrants.push(permission)
-          serverdata.save()
+          await serverdata.save()
 
           return new client.embed(
             message, `Now monitoring **granting of** permission \`${permission}\`. Members **manually** giving out roles to others will be punished with \`stripstaff\``, 'approve'
@@ -1973,7 +1985,7 @@ module.exports = {
 
           let i = serverdata.AntiNukePermissionRemoves.indexOf(permission)
           serverdata.AntiNukePermissionRemoves.splice(i, 1)
-          serverdata.save()
+          await serverdata.save()
 
           return new client.embed(
             message, `No longer monitoring **removal of** permission \`${permission}\``, 'approve'
@@ -1982,7 +1994,7 @@ module.exports = {
         } else {
 
           serverdata.AntiNukePermissionRemoves.push(permission)
-          serverdata.save()
+          await serverdata.save()
 
           return new client.embed(
             message, `Now monitoring **removal of** permission \`${permission}\`. Members **manually** giving out roles to others will be punished with \`stripstaff\``, 'approve'
@@ -1997,49 +2009,69 @@ module.exports = {
 
           if (serverdata?.AntiNukePermissionGrants.includes('administrator')) {
             array.push(`watching **grants** for \`administrator\` (do: stripstaff)`)
-          } else if (serverdata?.AntiNukePermissionGrants.includes('manage_channels')) {
+          }
+          if (serverdata?.AntiNukePermissionGrants.includes('manage_channels')) {
             array.push(`watching **grants** for \`manage_channels\` (do: stripstaff)`)
-          } else if (serverdata?.AntiNukePermissionGrants.includes('manage_roles')) {
+          }
+          if (serverdata?.AntiNukePermissionGrants.includes('manage_roles')) {
             array.push(`watching **grants** for \`manage_roles\` (do: stripstaff)`)
-          } else if (serverdata?.AntiNukePermissionGrants.includes('manage_expressions')) {
+          }
+          if (serverdata?.AntiNukePermissionGrants.includes('manage_expressions')) {
             array.push(`watching **grants** for \`manage_expressions\` (do: stripstaff)`)
-          } else if (serverdata?.AntiNukePermissionGrants.includes('manage_webhooks')) {
+          }
+          if (serverdata?.AntiNukePermissionGrants.includes('manage_webhooks')) {
             array.push(`watching **grants** for \`manage_webhooks\` (do: stripstaff)`)
-          } else if (serverdata?.AntiNukePermissionGrants.includes('manage_guild')) {
+          }
+          if (serverdata?.AntiNukePermissionGrants.includes('manage_guild')) {
             array.push(`watching **grants** for \`manage_guild\` (do: stripstaff)`)
-          } else if (serverdata?.AntiNukePermissionGrants.includes('manage_nicknames')) {
+          }
+          if (serverdata?.AntiNukePermissionGrants.includes('manage_nicknames')) {
             array.push(`watching **grants** for \`manage_nicknames\` (do: stripstaff)`)
-          } else if (serverdata?.AntiNukePermissionGrants.includes('kick_members')) {
+          }
+          if (serverdata?.AntiNukePermissionGrants.includes('kick_members')) {
             array.push(`watching **grants** for \`kick_members\` (do: stripstaff)`)
-          } else if (serverdata?.AntiNukePermissionGrants.includes('ban_members')) {
+          }
+          if (serverdata?.AntiNukePermissionGrants.includes('ban_members')) {
             array.push(`watching **grants** for \`ban_members\` (do: stripstaff)`)
-          } else if (serverdata?.AntiNukePermissionGrants.includes('mention_everyone')) {
+          }
+          if (serverdata?.AntiNukePermissionGrants.includes('mention_everyone')) {
             array.push(`watching **grants** for \`mention_everyone\` (do: stripstaff)`)
-          } else if (serverdata?.AntiNukePermissionGrants.includes('view_audit_log')) {
+          }
+          if (serverdata?.AntiNukePermissionGrants.includes('view_audit_log')) {
             array.push(`watching **grants** for \`view_audit_log\` (do: stripstaff)`)
           }
 
           if (serverdata?.AntiNukePermissionRemoves.includes('administrator')) {
             array.push(`watching **removals** for \`administrator\` (do: stripstaff)`)
-          } else if (serverdata?.AntiNukePermissionRemoves.includes('manage_channels')) {
+          }
+          if (serverdata?.AntiNukePermissionRemoves.includes('manage_channels')) {
             array.push(`watching **removals** for \`manage_channels\` (do: stripstaff)`)
-          } else if (serverdata?.AntiNukePermissionRemoves.includes('manage_roles')) {
+          }
+          if (serverdata?.AntiNukePermissionRemoves.includes('manage_roles')) {
             array.push(`watching **removals** for \`manage_roles\` (do: stripstaff)`)
-          } else if (serverdata?.AntiNukePermissionRemoves.includes('manage_expressions')) {
+          }
+          if (serverdata?.AntiNukePermissionRemoves.includes('manage_expressions')) {
             array.push(`watching **removals** for \`manage_expressions\` (do: stripstaff)`)
-          } else if (serverdata?.AntiNukePermissionRemoves.includes('manage_webhooks')) {
+          }
+          if (serverdata?.AntiNukePermissionRemoves.includes('manage_webhooks')) {
             array.push(`watching **removals** for \`manage_webhooks\` (do: stripstaff)`)
-          } else if (serverdata?.AntiNukePermissionRemoves.includes('manage_guild')) {
+          }
+          if (serverdata?.AntiNukePermissionRemoves.includes('manage_guild')) {
             array.push(`watching **removals** for \`manage_guild\` (do: stripstaff)`)
-          } else if (serverdata?.AntiNukePermissionRemoves.includes('manage_nicknames')) {
+          }
+          if (serverdata?.AntiNukePermissionRemoves.includes('manage_nicknames')) {
             array.push(`watching **removals** for \`manage_nicknames\` (do: stripstaff)`)
-          } else if (serverdata?.AntiNukePermissionRemoves.includes('kick_members')) {
+          }
+          if (serverdata?.AntiNukePermissionRemoves.includes('kick_members')) {
             array.push(`watching **removals** for \`kick_members\` (do: stripstaff)`)
-          } else if (serverdata?.AntiNukePermissionRemoves.includes('ban_members')) {
+          }
+          if (serverdata?.AntiNukePermissionRemoves.includes('ban_members')) {
             array.push(`watching **removals** for \`ban_members\` (do: stripstaff)`)
-          } else if (serverdata?.AntiNukePermissionRemoves.includes('mention_everyone')) {
+          }
+          if (serverdata?.AntiNukePermissionRemoves.includes('mention_everyone')) {
             array.push(`watching **removals** for \`mention_everyone\` (do: stripstaff)`)
-          } else if (serverdata?.AntiNukePermissionRemoves.includes('view_audit_log')) {
+          }
+          if (serverdata?.AntiNukePermissionRemoves.includes('view_audit_log')) {
             array.push(`watching **removals** for \`view_audit_log\` (do: stripstaff)`)
           }
 
@@ -2128,7 +2160,7 @@ module.exports = {
 
           let i = serverdata.AntiNukeWhitelistedUsers.indexOf(`${member.id}`)
           serverdata.AntiNukeWhitelistedUsers.splice(i, 1)
-          serverdata.save()
+          await serverdata.save()
 
           return new client.embed(
             message, `**${member.tag}** is no longer whitelisted`, 'approve'
@@ -2140,7 +2172,7 @@ module.exports = {
 
             let i = serverdata.AntiNukeWhitelistedUsers.indexOf(`${member.id}`)
             serverdata.AntiNukeWhitelistedUsers.splice(i, 1)
-            serverdata.save()
+            await serverdata.save()
 
             return new client.embed(
               message, `**${member.tag}** is no longer whitelisted to join`, 'approve'
@@ -2150,10 +2182,10 @@ module.exports = {
 
             let i = serverdata.AntiNukeWhitelistedUsers.indexOf(`${member.id}`)
             serverdata.AntiNukeWhitelistedUsers.splice(i, 1)
-            serverdata.save()
+            await serverdata.save()
 
             return new client.embed(
-              message, `**${member.tag}** is now whitelisted and will not trigger **antinuke**`, 'approve'
+              message, `**${member.tag}** is no longer whitelisted`, 'approve'
             )
           }
         })
@@ -2165,7 +2197,7 @@ module.exports = {
         await message.guild.members.fetch(member.id).then(async yo => {
 
           serverdata.AntiNukeWhitelistedUsers.push(member.id)
-          serverdata.save()
+          await serverdata.save()
 
           return new client.embed(
             message, `**${member.tag}** is now whitelisted and will not trigger **antinuke**`, 'approve'
@@ -2176,7 +2208,7 @@ module.exports = {
           if (member.bot) {
 
             serverdata.AntiNukeWhitelistedUsers.push(member.id)
-            serverdata.save()
+            await serverdata.save()
 
             return new client.embed(
               message, `**${member.tag}** is now whitelisted and can join`, 'approve'
@@ -2185,7 +2217,7 @@ module.exports = {
           } else if (!member.bot) {
 
             serverdata.AntiNukeWhitelistedUsers.push(member.id)
-            serverdata.save()
+            await serverdata.save()
 
             return new client.embed(
               message, `**${member.tag}** is now whitelisted and will not trigger **antinuke**`, 'approve'
@@ -2229,7 +2261,7 @@ module.exports = {
 
         let i = serverdata.AntiNukeWhitelistedAdmins.indexOf(`${user.user.id}`)
         serverdata.AntiNukeWhitelistedAdmins.splice(i, 1)
-        serverdata.save()
+        await serverdata.save()
 
         return new client.embed(
           message, `**${user.user.tag}** is no longer an **antinuke admin** and can no longer edit **antinuke settings**`, 'approve'
@@ -2238,7 +2270,7 @@ module.exports = {
       } else {
 
         serverdata.AntiNukeWhitelistedAdmins.push(user.user.id)
-        serverdata.save()
+        await serverdata.save()
 
         return new client.embed(
           message, `**${user.user.tag}** is now an **antinuke admin** and can edit **antinuke settings**`, 'approve'
@@ -2338,7 +2370,7 @@ module.exports = {
 
       } else {
 
-        const logchannel = message.mentions.channels.first() || message.guild.channels.cache.get(args[1]) || message.guild.channels.cache.find(c => String(c.name.includes(String(args.slice(1).join(' ')))))
+        const logchannel = message.mentions.channels.first() || message.guild.channels.cache.get(args[1]) || message.guild.channels.cache.find(c => String(c.name).toLowerCase().includes(String(args.slice(1).join(' ')).toLowerCase()))
 
         if (!logchannel || logchannel.type !== Discord.ChannelType.GuildText && logchannel.type !== Discord.ChannelType.GuildAnnouncement) {
 
@@ -2482,6 +2514,8 @@ module.exports = {
         
         const mem = await client.users.fetch(client.users.resolveId(member)).catch(() => { })
 
+        if (!mem) continue
+
         if (!mem.bot) {
           array2.push(mem)
         }
@@ -2492,6 +2526,8 @@ module.exports = {
       for (const member of serverdata.AntiNukeWhitelistedUsers) {
         
         const mem = await client.users.fetch(client.users.resolveId(member)).catch(() => { })
+
+        if (!mem) continue
 
         if (mem.bot) {
           array3.push(mem)
@@ -2520,7 +2556,7 @@ module.exports = {
         )
       }
 
-      if (serverdata.AntiNukeToggleRole || serverdata.AntiNukeToggleWebhook || serverdata.AntiNukeToggleWebhook || serverdata.AntiNukeToggleBan || serverdata.AntiNukeToggleChannel || serverdata.AntiNukeToggleKick || serverdata.AntiNukeToggleEmoji || serverdata.AntiNukeToggleVanity || serverdata.AntiNukeToggleBot || serverdata.AntiNukeWhitelistedUsers.length > 0 || serverdata.AntiNukeWhitelistedAdmins.length > 0) {
+      if (serverdata.AntiNukeToggleRole || serverdata.AntiNukeToggleWebhook || serverdata.AntiNukeToggleBan || serverdata.AntiNukeToggleChannel || serverdata.AntiNukeToggleKick || serverdata.AntiNukeToggleEmoji || serverdata.AntiNukeToggleVanity || serverdata.AntiNukeToggleBot || serverdata.AntiNukeWhitelistedUsers.length > 0) {
 
         const array = []
 
@@ -2578,6 +2614,12 @@ module.exports = {
 
           const mem = await client.users.fetch(client.users.resolveId(member)).catch(() => { })
 
+          if (!mem) {
+
+            array.push(`**Unknown User** whitelisted (\`${member}\`) [\`UNKNOWN\`]`)
+            continue
+          }
+
           if (mem.bot) {
             status = 'BOT'
           } else {
@@ -2608,7 +2650,13 @@ module.exports = {
           embeds.push(embed)
         }
 
-        if (embeds.length > 1) {
+        if (embeds.length === 0) {
+
+          return new client.embed(
+            message, `No **antinuke modules** or **whitelisted members & bots** were found`, 'neutral'
+          )
+
+        } else if (embeds.length > 1) {
 
           await client.pagination(message, embeds, embeds.length, `${array.length} ${array.length === 1 ? 'entry' : 'entries'}`)
 

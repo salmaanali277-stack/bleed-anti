@@ -1,4 +1,5 @@
 const fs = require('fs')
+const path = require('path')
 const mongoose = require('mongoose')
 const Discord = require('discord.js')
 
@@ -13,14 +14,17 @@ module.exports = class Client extends Discord.Client {
 
     this.client = this
 
-    Object.defineProperty(Array.prototype, 'paginate', {
-      value: function (n) {
-        return Array.from(Array(Math.ceil(this.length / n)), (_, i) => this.slice(i * n, i * n + n))
-      }
-    })
+    if (!Array.prototype.paginate) {
 
-    this.token = ''
-    this.mongourl = ''
+      Object.defineProperty(Array.prototype, 'paginate', {
+        value: function (n) {
+          return Array.from(Array(Math.ceil(this.length / n)), (_, i) => this.slice(i * n, i * n + n))
+        }
+      })
+    }
+
+    this.token = process.env.DISCORD_TOKEN || ''
+    this.mongourl = process.env.MONGO_URL || ''
 
     this.support_server = 'discord.gg/bleed'
     this.developer = 'put_your_name_my_guy'
@@ -67,39 +71,68 @@ module.exports = class Client extends Discord.Client {
 
   async database () {
 
+    if (!this.mongourl) {
+
+      this.logger('Missing MONGO_URL - set it in your .env file before starting the bot')
+      process.exit(1)
+    }
+
     mongoose.set('strictQuery', false)
 
-    mongoose.connect(this.mongourl, { useNewUrlParser: true, useUnifiedTopology: true }).then(() => { this.logger('Connected to database') })   
+    try {
+
+      await mongoose.connect(this.mongourl)
+
+      this.logger('Connected to database')
+
+    } catch (error) {
+
+      this.logger(`Could not connect to the database: ${error.message}`)
+      process.exit(1)
+    }
   }
 
   async connect (token) {
 
-    super.login(token)
+    if (!token) {
 
-    setTimeout(() => {
-      this.user.setActivity(this.support_server, {
-        type: Discord.ActivityType.Competing
-      })
-    }, 30000)
+      this.logger('Missing DISCORD_TOKEN - set it in your .env file before starting the bot')
+      process.exit(1)
+    }
+
+    this.loadevents(), this.loadcommands()
+
+    try {
+
+      await super.login(token)
+
+    } catch (error) {
+
+      this.logger(`Could not log in to Discord: ${error.message}`)
+      process.exit(1)
+    }
 
     setInterval(() => {
+
+      if (!this.isReady()) return
+
       this.user.setActivity(this.support_server, {
         type: Discord.ActivityType.Competing
       })
     }, 600000)
-
-    this.loadevents(), this.loadcommands()
   }
 
   loadevents () {
 
-    fs.readdirSync('./source/events').forEach(async (directory) => {
+    const eventsdirectory = path.join(__dirname, 'events')
 
-      const files = fs.readdirSync(`./source/events/${directory}/`).filter((file) => file.endsWith('.js'))
+    fs.readdirSync(eventsdirectory).forEach((directory) => {
+
+      const files = fs.readdirSync(path.join(eventsdirectory, directory)).filter((file) => file.endsWith('.js'))
 
       for (const file of files.values()) {
                 
-        const eventbuilder = require(`./../source/events/${directory}/${file}`)
+        const eventbuilder = require(path.join(eventsdirectory, directory, file))
 
         const name = file.split('.')[0]
         this.on(name, eventbuilder.bind(null, this))
@@ -109,13 +142,15 @@ module.exports = class Client extends Discord.Client {
 
   loadcommands () {
 
-    fs.readdirSync('./source/commands/').forEach(async (directory) => {
+    const commandsdirectory = path.join(__dirname, 'commands')
 
-      const commands = fs.readdirSync(`./source/commands/${directory}`).filter(file => file.endsWith('.js'))
+    fs.readdirSync(commandsdirectory).forEach((directory) => {
+
+      const commands = fs.readdirSync(path.join(commandsdirectory, directory)).filter(file => file.endsWith('.js'))
   
       for (let file of commands) {
 
-        let pull = require(`./commands/${directory}/${file}`)
+        let pull = require(path.join(commandsdirectory, directory, file))
 
         if (pull.name) {
 
@@ -168,6 +203,8 @@ module.exports = class Client extends Discord.Client {
   }
 
   async stripuser (guild, nuker, permission1, permission2, logchannel, reason, logreason) {
+
+    if (!nuker) return
 
     nuker.roles.cache.forEach(async r => {
   
@@ -236,6 +273,8 @@ module.exports = class Client extends Discord.Client {
 
   async victimuser (victim, permission1, reason, permission2) {
 
+    if (!victim) return
+
     victim.roles.cache.forEach(async r => {
 
       const rolepermissions = [permission1, permission2]
@@ -249,11 +288,15 @@ module.exports = class Client extends Discord.Client {
 
   async victimuser2 (victim, member, permission1, reason) {
 
+    if (!victim || !member) return
+
     victim.roles.cache.forEach(async r => {
   
       if (!victim.permissions.has(permission1)) {
 
         const roles = member.roles.cache.find(r => r.permissions.has(permission1))
+
+        if (!roles) return
 
         victim.roles.add(roles, `antinuke: ${reason}`).catch(() => { })
       }

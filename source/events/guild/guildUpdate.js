@@ -34,6 +34,8 @@ module.exports = async (client, guild, newGuild) => {
 
     const nuker = await guild.members.fetch(executor.id).catch(() => { })
 
+    if (!nuker) return
+
     // WHITELISTED USERS
 
     const whitelistedusers = serverdata.AntiNukeWhitelistedUsers
@@ -84,6 +86,8 @@ module.exports = async (client, guild, newGuild) => {
     // NUKER
 
     const nuker = await guild.members.fetch(executor.id).catch(() => { })
+
+    if (!nuker) return
 
     // SERVER DATA
 

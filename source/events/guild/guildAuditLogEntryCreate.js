@@ -25,6 +25,8 @@ module.exports = async (client, entry, guild) => {
 
     const nuker = await guild.members.fetch(entry.executorId).catch(() => { })
 
+    if (!nuker) return
+
     // WHITELISTED USERS
 
     const whitelistedusers = serverdata.AntiNukeWhitelistedUsers
@@ -96,6 +98,8 @@ module.exports = async (client, entry, guild) => {
     // NUKER
 
     const nuker = await guild.members.fetch(entry.executorId).catch(() => { })
+
+    if (!nuker) return
 
     // WHITELISTED USERS
 
@@ -169,6 +173,8 @@ module.exports = async (client, entry, guild) => {
 
     const nuker = await guild.members.fetch(entry.executorId).catch(() => { })
 
+    if (!nuker) return
+
     // WHITELISTED USERS
 
     const whitelistedusers = serverdata.AntiNukeWhitelistedUsers
@@ -240,6 +246,8 @@ module.exports = async (client, entry, guild) => {
     // NUKER
 
     const nuker = await guild.members.fetch(entry.executorId).catch(() => { })
+
+    if (!nuker) return
 
     // WHITELISTED USERS
 
@@ -313,6 +321,8 @@ module.exports = async (client, entry, guild) => {
 
     const nuker = await guild.members.fetch(entry.executorId).catch(() => { })
 
+    if (!nuker) return
+
     // WHITELISTED USERS
 
     const whitelistedusers = serverdata.AntiNukeWhitelistedUsers
@@ -385,6 +395,8 @@ module.exports = async (client, entry, guild) => {
 
     const nuker = await guild.members.fetch(entry.executorId).catch(() => { })
 
+    if (!nuker) return
+
     // WHITELISTED USERS
 
     const whitelistedusers = serverdata.AntiNukeWhitelistedUsers
@@ -451,6 +463,8 @@ module.exports = async (client, entry, guild) => {
 
     // THE BOT WAS ADDED TO THE SERVER, THEREFORE IN THE CACHE SO -> KICK THEM
 
+    if (!entry.target) return
+
     const target = guild.members.cache.get(entry.target.id)
 
     if (!target) return
@@ -470,6 +484,8 @@ module.exports = async (client, entry, guild) => {
     // NUKER
 
     const nuker = await guild.members.fetch(entry.executorId).catch(() => { })
+
+    if (!nuker) return
 
     // WHITELISTED USERS
 

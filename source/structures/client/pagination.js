@@ -4,19 +4,21 @@ const pagination = async (message, embeds, pages, items, footer) => {
 
   embeds[0].setFooter({ text : `Page 1/${pages} (${items}) ${footer || ''}` })
 
+  // A button must carry a label and/or an emoji, and setEmoji() rejects an empty
+  // string - so fall back to a text label when client.emotes.* is not configured.
+
+  const button = (customId, style, emoji) => {
+
+    const built = new Discord.ButtonBuilder({ customId }).setStyle(style)
+
+    return emoji ? built.setEmoji(emoji) : built.setLabel(customId)
+  }
+
   const row = new Discord.ActionRowBuilder().addComponents(
-    new Discord.ButtonBuilder({
-      customId: 'Previous'
-    }).setStyle('Primary').setEmoji(`${message.client.emotes.previous}`),
-    new Discord.ButtonBuilder({
-      customId: 'Next'
-    }).setStyle('Primary').setEmoji(`${message.client.emotes.next}`),
-    new Discord.ButtonBuilder({
-      customId: 'Skip'
-    }).setStyle('Secondary').setEmoji(`${message.client.emotes.skip}`),
-    new Discord.ButtonBuilder({
-      customId: 'Cancel'
-    }).setStyle('Danger').setEmoji(`${message.client.emotes.cancel}`),
+    button('Previous', 'Primary', message.client.emotes.previous),
+    button('Next', 'Primary', message.client.emotes.next),
+    button('Skip', 'Secondary', message.client.emotes.skip),
+    button('Cancel', 'Danger', message.client.emotes.cancel),
   )
 
   let msg = await message.channel.send({ embeds: [embeds[0]], components: [row] })
@@ -83,7 +85,7 @@ const pagination = async (message, embeds, pages, items, footer) => {
         compo.setDisabled(true)
       })
     
-      msg.edit({ components: [row] })
+      await msg.edit({ components: [row] }).catch(() => { })
 
       const embed = new Discord.EmbedBuilder()
 
@@ -113,7 +115,7 @@ const pagination = async (message, embeds, pages, items, footer) => {
   
           return await interaction.followUp({ embeds: [embed], ephemeral: true })
 
-        } else if (m.content > embeds.length) {
+        } else if (parseInt(m.content) > embeds.length || parseInt(m.content) < 1) {
 
           index = 0
           embeds[index].setFooter({ text: `Page ${index + 1}/${pages} (${items}) ${footer || ''}` })
@@ -140,14 +142,7 @@ const pagination = async (message, embeds, pages, items, footer) => {
           compo.setDisabled(false)
         })
 
-        try {
-
-          msg.edit({ components: [row] })
-
-        } catch (error) {
-
-          console.error(error)
-        }
+        await msg.edit({ components: [row] }).catch(() => { })
       })
 
     } else if (interaction.customId == 'Cancel') {
@@ -163,7 +158,7 @@ const pagination = async (message, embeds, pages, items, footer) => {
     if (cancelstatus) {
       return
     } else {
-      return await msg.edit({ components: [] })
+      return await msg.edit({ components: [] }).catch(() => { })
     }
   })
 }

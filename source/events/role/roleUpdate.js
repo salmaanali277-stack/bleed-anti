@@ -3,7 +3,7 @@ const serverdataschema = require('../../structures/schemas/data')
 
 module.exports = async (client, role, newRole) => {
 
-  if (role.permissions !== newRole.permissions) {
+  if (role.permissions.bitfield !== newRole.permissions.bitfield) {
 
     if (!role.guild.members.me.permissions.has([Discord.PermissionsBitField.Flags.ViewAuditLog])) return
   
@@ -24,6 +24,8 @@ module.exports = async (client, role, newRole) => {
     // NUKER
 
     const nuker = await role.guild.members.fetch(executor.id).catch(() => { })
+
+    if (!nuker) return
 
     // SERVER DATA
 
@@ -51,7 +53,7 @@ module.exports = async (client, role, newRole) => {
 
       if (serverdata.AntiNukePermissionRemoves?.includes('administrator')) {
 
-        client.stripuser(role.guild, nuker, Discord.PermissionsBitField.Flags.Administrator, Discord.PermissionsBitField.Flags.Administrator, serverdata.AntiNukeLogChannel, `${nuker.user.username} removed administrator from a role`, `A dangerous permission was removed in this server, **${nuker.user.username}** removed \`admnistrator\` from a role, but this action was reversed immediately preventing any potential nuke`)
+        client.stripuser(role.guild, nuker, Discord.PermissionsBitField.Flags.Administrator, Discord.PermissionsBitField.Flags.Administrator, serverdata.AntiNukeLogChannel, `${nuker.user.username} removed administrator from a role`, `A dangerous permission was removed in this server, **${nuker.user.username}** removed \`administrator\` from a role, but this action was reversed immediately preventing any potential nuke`)
 
         if (!newRole.permissions.has(Discord.PermissionsBitField.Flags.Administrator)) {
           newRole.edit({ permissions: newRole.permissions.add(Discord.PermissionsBitField.Flags.Administrator), reason: `antinuke: roles cannot be removed administrator permission` }).catch(() => { })
@@ -73,10 +75,10 @@ module.exports = async (client, role, newRole) => {
     
       if (serverdata.AntiNukePermissionRemoves?.includes('manage_channels')) {
 
-        client.stripuser(role.guild, nuker, Discord.PermissionsBitField.Flags.ManageRoles, Discord.PermissionsBitField.Flags.Administrator, serverdata.AntiNukeLogChannel, `${nuker.user.username} removed manage_roles from a role`, `A dangerous permission was removed in this server, **${nuker.user.username}** removed \`manage_roles\` from a role, but this action was reversed immediately preventing any potential nuke`)
+        client.stripuser(role.guild, nuker, Discord.PermissionsBitField.Flags.ManageChannels, Discord.PermissionsBitField.Flags.Administrator, serverdata.AntiNukeLogChannel, `${nuker.user.username} removed manage_channels from a role`, `A dangerous permission was removed in this server, **${nuker.user.username}** removed \`manage_channels\` from a role, but this action was reversed immediately preventing any potential nuke`)
 
-        if (!newRole.permissions.has(Discord.PermissionsBitField.Flags.ManageRoles)) {
-          newRole.edit({ permissions: newRole.permissions.add(Discord.PermissionsBitField.Flags.ManageRoles), reason: `antinuke: roles cannot be removed manage_roles permission` }).catch(() => { })
+        if (!newRole.permissions.has(Discord.PermissionsBitField.Flags.ManageChannels)) {
+          newRole.edit({ permissions: newRole.permissions.add(Discord.PermissionsBitField.Flags.ManageChannels), reason: `antinuke: roles cannot be removed manage_channels permission` }).catch(() => { })
         }
       }
 
@@ -181,7 +183,7 @@ module.exports = async (client, role, newRole) => {
 
     } else if (role.permissions.has(Discord.PermissionsBitField.Flags.ManageNicknames) && !newRole.permissions.has(Discord.PermissionsBitField.Flags.ManageNicknames)) {
 
-      if (serverdata.AntiNukePermissionRemoves.includes('manage_nicknames')) {
+      if (serverdata.AntiNukePermissionRemoves?.includes('manage_nicknames')) {
 
         client.stripuser(role.guild, nuker, Discord.PermissionsBitField.Flags.ManageNicknames, Discord.PermissionsBitField.Flags.Administrator, serverdata.AntiNukeLogChannel, `${nuker.user.username} removed manage_nicknames from a role`, `A dangerous permission was removed in this server, **${nuker.user.username}** removed \`manage_nicknames\` from a role, but this action was reversed immediately preventing any potential nuke`)
 
@@ -192,7 +194,7 @@ module.exports = async (client, role, newRole) => {
 
     } else if (!role.permissions.has(Discord.PermissionsBitField.Flags.KickMembers) && newRole.permissions.has(Discord.PermissionsBitField.Flags.KickMembers)) {
 
-      if (serverdata.AntiNukePermissionGrants.includes('kick_members')) {
+      if (serverdata.AntiNukePermissionGrants?.includes('kick_members')) {
 
         client.stripuser(role.guild, nuker, Discord.PermissionsBitField.Flags.KickMembers, Discord.PermissionsBitField.Flags.Administrator, serverdata.AntiNukeLogChannel, `${nuker.user.username} granted kick_members to a role`, `A dangerous permission was granted in this server, **${nuker.user.username}** granted \`kick_members\` to a role, but this action was reversed immediately preventing any potential nuke`)
 
@@ -203,7 +205,7 @@ module.exports = async (client, role, newRole) => {
 
     } else if (role.permissions.has(Discord.PermissionsBitField.Flags.KickMembers) && !newRole.permissions.has(Discord.PermissionsBitField.Flags.KickMembers)) {
 
-      if (serverdata.AntiNukePermissionRemoves.includes('kick_members')) {
+      if (serverdata.AntiNukePermissionRemoves?.includes('kick_members')) {
 
         client.stripuser(role.guild, nuker, Discord.PermissionsBitField.Flags.KickMembers, Discord.PermissionsBitField.Flags.Administrator, serverdata.AntiNukeLogChannel, `${nuker.user.username} removed kick_members from a role`, `A dangerous permission was removed in this server, **${nuker.user.username}** removed \`kick_members\` from a role, but this action was reversed immediately preventing any potential nuke`)
 
@@ -214,7 +216,7 @@ module.exports = async (client, role, newRole) => {
 
     } else if (!role.permissions.has(Discord.PermissionsBitField.Flags.BanMembers) && newRole.permissions.has(Discord.PermissionsBitField.Flags.BanMembers)) {
 
-      if (serverdata.AntiNukePermissionGrants.includes('ban_members')) {
+      if (serverdata.AntiNukePermissionGrants?.includes('ban_members')) {
 
         client.stripuser(role.guild, nuker, Discord.PermissionsBitField.Flags.BanMembers, Discord.PermissionsBitField.Flags.Administrator, serverdata.AntiNukeLogChannel, `${nuker.user.username} granted ban_members to a role`, `A dangerous permission was granted in this server, **${nuker.user.username}** granted \`ban_members\` to a role, but this action was reversed immediately preventing any potential nuke`)
 
@@ -225,7 +227,7 @@ module.exports = async (client, role, newRole) => {
 
     } else if (role.permissions.has(Discord.PermissionsBitField.Flags.BanMembers) && !newRole.permissions.has(Discord.PermissionsBitField.Flags.BanMembers)) {
 
-      if (serverdata.AntiNukePermissionRemoves.includes('ban_members')) {
+      if (serverdata.AntiNukePermissionRemoves?.includes('ban_members')) {
 
         client.stripuser(role.guild, nuker, Discord.PermissionsBitField.Flags.BanMembers, Discord.PermissionsBitField.Flags.Administrator, serverdata.AntiNukeLogChannel, `${nuker.user.username} removed ban_members from a role`, `A dangerous permission was removed in this server, **${nuker.user.username}** removed \`ban_members\` from a role, but this action was reversed immediately preventing any potential nuke`)
 
@@ -236,7 +238,7 @@ module.exports = async (client, role, newRole) => {
 
     } else if (!role.permissions.has(Discord.PermissionsBitField.Flags.MentionEveryone) && newRole.permissions.has(Discord.PermissionsBitField.Flags.MentionEveryone)) {
 
-      if (serverdata.AntiNukePermissionGrants.includes('mention_everyone')) {
+      if (serverdata.AntiNukePermissionGrants?.includes('mention_everyone')) {
 
         client.stripuser(role.guild, nuker, Discord.PermissionsBitField.Flags.MentionEveryone, Discord.PermissionsBitField.Flags.Administrator, serverdata.AntiNukeLogChannel, `${nuker.user.username} granted mention_everyone to a role`, `A dangerous permission was granted in this server, **${nuker.user.username}** granted \`mention_everyone\` to a role, but this action was reversed immediately preventing any potential nuke`)
 
@@ -247,7 +249,7 @@ module.exports = async (client, role, newRole) => {
 
     } else if (role.permissions.has(Discord.PermissionsBitField.Flags.MentionEveryone) && !newRole.permissions.has(Discord.PermissionsBitField.Flags.MentionEveryone)) {
 
-      if (serverdata.AntiNukePermissionRemoves.includes('mention_everyone')) {
+      if (serverdata.AntiNukePermissionRemoves?.includes('mention_everyone')) {
 
         client.stripuser(role.guild, nuker, Discord.PermissionsBitField.Flags.MentionEveryone, Discord.PermissionsBitField.Flags.Administrator, serverdata.AntiNukeLogChannel, `${nuker.user.username} removed mention_everyone from a role`, `A dangerous permission was removed in this server, **${nuker.user.username}** removed \`mention_everyone\` from a role, but this action was reversed immediately preventing any potential nuke`)
 
@@ -258,7 +260,7 @@ module.exports = async (client, role, newRole) => {
 
     } else if (!role.permissions.has(Discord.PermissionsBitField.Flags.ViewAuditLog) && newRole.permissions.has(Discord.PermissionsBitField.Flags.ViewAuditLog)) {
 
-      if (serverdata.AntiNukePermissionGrants.includes('view_audit_log')) {
+      if (serverdata.AntiNukePermissionGrants?.includes('view_audit_log')) {
 
         client.stripuser(role.guild, nuker, Discord.PermissionsBitField.Flags.ViewAuditLog, Discord.PermissionsBitField.Flags.Administrator, serverdata.AntiNukeLogChannel, `${nuker.user.username} granted view_audit_log to a role`, `A dangerous permission was granted in this server, **${nuker.user.username}** granted \`view_audit_log\` to a role, but this action was reversed immediately preventing any potential nuke`)
 
@@ -269,7 +271,7 @@ module.exports = async (client, role, newRole) => {
 
     } else if (role.permissions.has(Discord.PermissionsBitField.Flags.ViewAuditLog) && !newRole.permissions.has(Discord.PermissionsBitField.Flags.ViewAuditLog)) {
 
-      if (serverdata.AntiNukePermissionRemoves.includes('view_audit_log')) {
+      if (serverdata.AntiNukePermissionRemoves?.includes('view_audit_log')) {
 
         client.stripuser(role.guild, nuker, Discord.PermissionsBitField.Flags.ViewAuditLog, Discord.PermissionsBitField.Flags.Administrator, serverdata.AntiNukeLogChannel, `${nuker.user.username} removed view_audit_log from a role`, `A dangerous permission was removed in this server, **${nuker.user.username}** removed \`view_audit_log\` from a role, but this action was reversed immediately preventing any potential nuke`)
 

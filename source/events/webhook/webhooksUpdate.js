@@ -3,7 +3,7 @@ const serverdataschema = require('../../structures/schemas/data')
 
 module.exports = async (client, webhook) => {
 
-  if (!webhook.guild.members.me.permissions.has([Discord.PermissionsBitField.Flags.ViewAuditLog])) return
+  if (!webhook.guild.members.me?.permissions.has([Discord.PermissionsBitField.Flags.ViewAuditLog])) return
 
   // SERVER DATA
 

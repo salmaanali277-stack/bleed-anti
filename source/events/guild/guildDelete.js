@@ -8,6 +8,6 @@ module.exports = async (client, guild) => {
   const serverdata = await serverdataschema.findOne({ GuildID: guild.id })
 
   if (serverdata) {
-    await serverdataschema.findOneAndRemove({ GuildID: guild.id })
+    await serverdataschema.findOneAndDelete({ GuildID: guild.id })
   }
 }

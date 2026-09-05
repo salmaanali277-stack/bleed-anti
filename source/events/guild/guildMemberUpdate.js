@@ -3,7 +3,7 @@ const serverdataschema = require('../../structures/schemas/data')
 
 module.exports = async (client, member, newMember) => {
 
-  if (member.permissions !== newMember.permissions) {
+  if (member.permissions.bitfield !== newMember.permissions.bitfield) {
 
     if (!member.guild.members.me.permissions.has([Discord.PermissionsBitField.Flags.ViewAuditLog])) return
   
@@ -27,6 +27,8 @@ module.exports = async (client, member, newMember) => {
     // VICTIM
 
     const victim = await member.guild.members.fetch(target.id).catch(() => { })
+
+    if (!nuker || !victim) return
 
     // SERVER DATA
 
@@ -169,9 +171,9 @@ module.exports = async (client, member, newMember) => {
 
       if (serverdata.AntiNukePermissionGrants?.includes('kick_members')) {
 
-        client.stripuser(member.guild, nuker, Discord.PermissionsBitField.Flags.KickMembers, Discord.PermissionsBitField.Flags.Administrator, serverdata.AntiNukeLogChannel, `${nuker.user.username} gave manage_nicknames to a member`, `A dangerous role was added in this server, **${nuker.user.username}** gave \`manage_nicknames\` to a member, but this action was reversed immediately preventing any potential nuke`)
+        client.stripuser(member.guild, nuker, Discord.PermissionsBitField.Flags.KickMembers, Discord.PermissionsBitField.Flags.Administrator, serverdata.AntiNukeLogChannel, `${nuker.user.username} gave kick_members to a member`, `A dangerous role was added in this server, **${nuker.user.username}** gave \`kick_members\` to a member, but this action was reversed immediately preventing any potential nuke`)
 
-        client.victimuser(victim, Discord.PermissionsBitField.Flags.KickMembers, `${victim.user.username} was granted manage_nicknames from a member that is not whitelisted`, '')
+        client.victimuser(victim, Discord.PermissionsBitField.Flags.KickMembers, `${victim.user.username} was granted kick_members from a member that is not whitelisted`, '')
       }
 
     } else if (member.permissions.has(Discord.PermissionsBitField.Flags.KickMembers) && !newMember.permissions.has(Discord.PermissionsBitField.Flags.KickMembers)) {

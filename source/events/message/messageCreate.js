@@ -11,7 +11,7 @@ module.exports = async (client, message) => {
 
   if (!serverdata) return
 
-  const guildprefix = serverdata.Prefix
+  const guildprefix = serverdata.Prefix || ','
 
   let guildprefix1
 
@@ -43,5 +43,12 @@ module.exports = async (client, message) => {
   let command = client.commands.get(cmd) || client.commands.get(client.aliases.get(cmd))
   if(!command) return
 
-  if(command) command.run(client, message, args)
+  try {
+
+    await command.run(client, message, args)
+
+  } catch (error) {
+
+    client.logger(`Command "${cmd}" failed in guild ${message.guild.id}: ${error.stack || error}`)
+  }
 }

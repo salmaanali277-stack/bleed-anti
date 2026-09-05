@@ -1,0 +1,19 @@
+{
+  "name": "bleed-anti",
+  "version": "1.0.0",
+  "description": "Discord antinuke bot",
+  "main": "index.js",
+  "private": true,
+  "scripts": {
+    "start": "node index.js"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "dependencies": {
+    "discord.js": "^14.27.0",
+    "dotenv": "^17.4.2",
+    "mongoose": "^8.9.5",
+    "phin": "^3.7.1"
+  }
+}
